@@ -1,7 +1,5 @@
 import './style.css'
 
-import './style.css'
-
 document.addEventListener('DOMContentLoaded', function() {
 
     // Mobile menu toggle
@@ -16,9 +14,25 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Close mobile menu when clicking on a link
+    // --- LÓGICA DE ROLAGEM SUAVE COM JAVASCRIPT ---
     document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', () => {
+        link.addEventListener('click', function(event) {
+            // 1. Previne o comportamento padrão (o "salto" instantâneo)
+            event.preventDefault();
+
+            // 2. Pega o ID da seção alvo (ex: "#sobre") a partir do link clicado
+            const targetId = this.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+
+            // 3. Se a seção existir, rola suavemente até ela
+            if (targetSection) {
+                targetSection.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+            
+            // Lógica para fechar o menu mobile após o clique
             if (navMenu && navMenu.classList.contains('active')) {
                 document.body.classList.remove('menu-open');
                 navMenu.classList.remove('active');

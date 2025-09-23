@@ -1,13 +1,16 @@
 import './style.css'
 
-// Smooth scrolling and navigation
+// O código inteiro será envolvido no 'DOMContentLoaded' para garantir que o HTML esteja pronto.
 document.addEventListener('DOMContentLoaded', function() {
+
     // Mobile menu toggle
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
     
-    if (hamburger) {
+    if (hamburger && navMenu) {
         hamburger.addEventListener('click', function() {
+            // Adicionando uma classe ao body para desabilitar o scroll quando o menu estiver aberto
+            document.body.classList.toggle('menu-open');
             navMenu.classList.toggle('active');
             hamburger.classList.toggle('active');
         });
@@ -16,7 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close mobile menu when clicking on a link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
-            if (navMenu.classList.contains('active')) {
+            if (navMenu && navMenu.classList.contains('active')) {
+                document.body.classList.remove('menu-open');
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
             }
@@ -26,50 +30,40 @@ document.addEventListener('DOMContentLoaded', function() {
     // Header background on scroll
     const header = document.querySelector('.header');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 100) {
-            header.style.background = 'rgba(255, 255, 255, 0.98)';
-            header.style.backdropFilter = 'blur(15px)';
-            header.style.boxShadow = '0 2px 20px rgba(139, 69, 19, 0.1)';
+        if (window.scrollY > 50) { // Diminuí o valor para o efeito aparecer mais cedo
+            header.classList.add('scrolled');
         } else {
-            header.style.background = 'rgba(255, 255, 255, 0.95)';
-            header.style.backdropFilter = 'blur(10px)';
-            header.style.boxShadow = 'none';
+            header.classList.remove('scrolled');
         }
     });
 
-    // Intersection Observer for animations
+    // --- SISTEMA DE ANIMAÇÃO ÚNICO E CORRIGIDO ---
+    // Intersection Observer for all animations
     const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
+        threshold: 0.1, // O elemento precisa estar 10% visível
+        rootMargin: '0px 0px -50px 0px' // Começa a observar um pouco antes de chegar no elemento
     };
 
     const observer = new IntersectionObserver((entries, observerInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate');
-                // Stop observing the element once it's animated for better performance
+                // Para de observar o elemento depois que ele foi animado (melhora a performance)
                 observerInstance.unobserve(entry.target);
             }
         });
     }, observerOptions);
 
-    // Observe elements for animation
-    document.querySelectorAll('.about-card').forEach(card => observer.observe(card));
-    document.querySelectorAll('.stat-item').forEach(stat => observer.observe(stat));
-    document.querySelectorAll('.skill-category').forEach(skill => observer.observe(skill));
-    document.querySelectorAll('.contact-item').forEach(item => observer.observe(item));
+    // Observe all elements that need animation
+    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item').forEach(el => observer.observe(el));
 
-    // Skills animation
+    // Skills bar animation
     const skillsSection = document.querySelector('#habilidades');
-    let skillsAnimated = false;
-
     const skillsObserver = new IntersectionObserver((entries, skillsObserverInstance) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting && !skillsAnimated) {
+            if (entry.isIntersecting) {
                 animateSkills();
-                skillsAnimated = true;
-                // Stop observing the skills section once animated
-                skillsObserverInstance.unobserve(entry.target);
+                skillsObserverInstance.unobserve(entry.target); // Anima apenas uma vez
             }
         });
     }, { threshold: 0.3 });
@@ -84,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 const progress = bar.dataset.progress;
                 bar.style.width = progress + '%';
-            }, index * 200);
+            }, index * 150); // Acelerei um pouco a animação
         });
     }
 
@@ -94,11 +88,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const parallaxElements = document.querySelectorAll('.floating-elements .element');
         
         parallaxElements.forEach((element, index) => {
-            const speed = (index + 1) * 0.1;
+            const speed = (index + 1) * 0.05; // Suavizei o efeito parallax
             element.style.transform = `translateY(${scrolled * speed}px)`;
         });
 
-        // Architect icon rotation based on scroll
         const architectIcon = document.querySelector('.architect-svg');
         if (architectIcon) {
             architectIcon.style.transform = `rotate(${scrolled * 0.1}deg)`;
@@ -144,18 +137,35 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
-        notification.innerHTML = `
-            <div class="notification-content">
-                <span class="notification-message">${message}</span>
-                <button class="notification-close">&times;</button>
-            </div>
-        `;
+        notification.innerHTML = `<div class="notification-content"><span class="notification-message">${message}</span><button class="notification-close">&times;</button></div>`;
+        document.body.appendChild(notification);
         
-        notification.style.cssText = `
+        // Trigger the animation
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+        
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.classList.remove('show');
+            setTimeout(() => notification.remove(), 300);
+        });
+        
+        setTimeout(() => {
+            if (document.contains(notification)) {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }
+        }, 5000);
+    }
+
+    // Inject necessary CSS for notification and other dynamic styles
+    const style = document.createElement('style');
+    style.textContent = `
+        /* Adicionando estilos para a notificação e menu mobile */
+        .notification {
             position: fixed;
             top: 20px;
             right: 20px;
-            background: ${type === 'success' ? '#4CAF50' : type === 'error' ? '#f44336' : '#2196F3'};
             color: white;
             padding: 16px 20px;
             border-radius: 8px;
@@ -166,131 +176,50 @@ document.addEventListener('DOMContentLoaded', function() {
             transition: all 0.3s ease;
             max-width: 300px;
             font-family: var(--font-primary);
-        `;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.style.opacity = '1';
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-        
-        const closeBtn = notification.querySelector('.notification-close');
-        closeBtn.addEventListener('click', () => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100px)';
-            setTimeout(() => notification.remove(), 300);
-        });
-        
-        setTimeout(() => {
-            if (document.contains(notification)) {
-                notification.style.opacity = '0';
-                notification.style.transform = 'translateX(100px)';
-                setTimeout(() => notification.remove(), 300);
+        }
+        .notification.notification-success { background: #4CAF50; }
+        .notification.notification-error { background: #f44336; }
+        .notification.notification-info { background: #2196F3; }
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .notification-content { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .notification-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; transition: background 0.2s; border-radius: 50%; width: 24px; height: 24px; }
+        .notification-close:hover { background: rgba(255,255,255,0.2); }
+        .header.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1);
+        }
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                gap: 0;
+                flex-direction: column;
+                background-color: white;
+                width: 100%;
+                height: 100vh;
+                text-align: center;
+                transition: 0.3s;
+                justify-content: center;
             }
-        }, 5000);
-    }
-
-    // Add hover effects to buttons
-    document.querySelectorAll('.btn').forEach(button => {
-        button.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-2px) scale(1.02)';
-        });
-        
-        button.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-
-    // Add click ripple effect to cards
-    document.querySelectorAll('.about-card, .skill-category, .contact-item').forEach(card => {
-        card.addEventListener('click', function(e) {
-            const ripple = document.createElement('span');
-            const rect = this.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height);
-            const x = e.clientX - rect.left - size / 2;
-            const y = e.clientY - rect.top - size / 2;
-            
-            ripple.style.cssText = `
-                position: absolute;
-                width: ${size}px;
-                height: ${size}px;
-                left: ${x}px;
-                top: ${y}px;
-                background: rgba(139, 69, 19, 0.1);
-                border-radius: 50%;
-                transform: scale(0);
-                animation: ripple 0.6s linear;
-                pointer-events: none;
-            `;
-            
-            this.style.position = 'relative';
-            this.style.overflow = 'hidden';
-            this.appendChild(ripple);
-            
-            setTimeout(() => ripple.remove(), 600);
-        });
-    });
-
-    // Add CSS animation for ripple effect
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes ripple {
-            to {
-                transform: scale(4);
-                opacity: 0;
+            .nav-menu.active {
+                left: 0;
             }
-        }
-        
-        .notification-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-        }
-        
-        .notification-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 18px;
-            cursor: pointer;
-            padding: 0;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s;
-        }
-        
-        .notification-close:hover {
-            background: rgba(255,255,255,0.2);
+            .nav-link {
+                font-size: 1.5rem;
+                padding: 1rem 0;
+                display: block;
+            }
+            .hamburger.active span:nth-child(2) { opacity: 0; }
+            .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+            .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+            body.menu-open { overflow: hidden; }
         }
     `;
     document.head.appendChild(style);
 
-    // Initialize all animations
-    setTimeout(() => {
-        document.body.classList.add('loaded');
-    }, 100);
 });
-
-// Performance optimization: Throttle scroll events
-function throttle(func, wait) {
-    let timeout;
-    return function executedFunction(...args) {
-        const later = () => {
-            clearTimeout(timeout);
-            func.apply(this, args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-    };
-}
-
-// Apply throttling to scroll events
-window.addEventListener('scroll', throttle(() => {
-    // Other scroll-based logic could go here if needed
-}, 16)); // ~60fps

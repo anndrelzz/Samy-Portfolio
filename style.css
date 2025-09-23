@@ -53,6 +53,7 @@ body {
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 80px; /* Adjust based on header height */
 }
 
 /* Container */
@@ -379,11 +380,25 @@ html {
     margin: 0 auto;
 }
 
-/* About Section */
-.about {
-    padding: var(--spacing-xxl) 0;
-    background: linear-gradient(135deg, var(--soft-pink) 0%, var(--light-blue) 100%);
+/* --- ALTERAÇÃO PRINCIPAL PARA O GRADIENTE --- */
+.main-content-wrapper {
+    background: linear-gradient(to bottom, 
+        var(--soft-pink), 
+        var(--light-blue), 
+        var(--lavender), 
+        var(--sage-green), 
+        var(--cream)
+    );
 }
+
+.about,
+.skills,
+.projects,
+.contact {
+    padding: var(--spacing-xxl) 0;
+    background: transparent; /* Garante que as seções sejam transparentes */
+}
+/* --- FIM DA ALTERAÇÃO --- */
 
 .about-content {
     display: grid;
@@ -458,12 +473,6 @@ html {
     font-weight: 500;
 }
 
-/* Skills Section */
-.skills {
-    padding: var(--spacing-xxl) 0;
-    background: linear-gradient(135deg, var(--lavender) 0%, var(--cream) 100%);
-}
-
 .skills-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -477,7 +486,7 @@ html {
     box-shadow: var(--shadow-medium);
     text-align: center;
     transform: translateY(50px);
-    opacity: 0.5;
+    opacity: 0;
     transition: all var(--transition-medium);
 }
 
@@ -560,12 +569,6 @@ html {
     font-size: 0.85rem;
     color: var(--secondary-brown);
     font-weight: 500;
-}
-
-/* Projects Section */
-.projects {
-    padding: var(--spacing-xxl) 0;
-    background: linear-gradient(135deg, var(--sage-green) 0%, var(--soft-pink) 100%);
 }
 
 .projects-coming-soon {
@@ -685,12 +688,6 @@ html {
     padding: 0 var(--spacing-md) var(--spacing-md);
     color: var(--secondary-brown);
     font-style: italic;
-}
-
-/* Contact Section */
-.contact {
-    padding: var(--spacing-xxl) 0;
-    background: linear-gradient(135deg, var(--cream) 0%, var(--light-blue) 100%);
 }
 
 .contact-content {

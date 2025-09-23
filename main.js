@@ -1,7 +1,4 @@
 import './style.css'
-import javascriptLogo from './javascript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.js'
 
 // Smooth scrolling and navigation
 document.addEventListener('DOMContentLoaded', function() {
@@ -19,8 +16,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Close mobile menu when clicking on a link
     document.querySelectorAll('.nav-link').forEach(link => {
         link.addEventListener('click', () => {
-            navMenu.classList.remove('active');
-            hamburger.classList.remove('active');
+            if (navMenu.classList.contains('active')) {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            }
         });
     });
 
@@ -44,10 +43,12 @@ document.addEventListener('DOMContentLoaded', function() {
         rootMargin: '0px 0px -50px 0px'
     };
 
-    const observer = new IntersectionObserver((entries) => {
+    const observer = new IntersectionObserver((entries, observerInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('animate');
+                // Stop observing the element once it's animated for better performance
+                observerInstance.unobserve(entry.target);
             }
         });
     }, observerOptions);
@@ -62,11 +63,13 @@ document.addEventListener('DOMContentLoaded', function() {
     const skillsSection = document.querySelector('#habilidades');
     let skillsAnimated = false;
 
-    const skillsObserver = new IntersectionObserver((entries) => {
+    const skillsObserver = new IntersectionObserver((entries, skillsObserverInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting && !skillsAnimated) {
                 animateSkills();
                 skillsAnimated = true;
+                // Stop observing the skills section once animated
+                skillsObserverInstance.unobserve(entry.target);
             }
         });
     }, { threshold: 0.3 });
@@ -108,31 +111,26 @@ document.addEventListener('DOMContentLoaded', function() {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Get form data
             const formData = new FormData(contactForm);
             const name = formData.get('name');
             const email = formData.get('email');
             const subject = formData.get('subject');
             const message = formData.get('message');
             
-            // Simple validation
             if (!name || !email || !subject || !message) {
                 showNotification('Por favor, preencha todos os campos.', 'error');
                 return;
             }
             
-            // Email validation
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 showNotification('Por favor, insira um email válido.', 'error');
                 return;
             }
             
-            // Simulate form submission
             showNotification('Mensagem enviada com sucesso! Retornarei em breve.', 'success');
             contactForm.reset();
             
-            // Remove focus from form fields
             document.querySelectorAll('.form-group input, .form-group textarea').forEach(field => {
                 field.blur();
             });
@@ -141,7 +139,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Notification system
     function showNotification(message, type = 'info') {
-        // Remove existing notifications
         const existingNotifications = document.querySelectorAll('.notification');
         existingNotifications.forEach(notification => notification.remove());
         
@@ -154,7 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         
-        // Add notification styles
         notification.style.cssText = `
             position: fixed;
             top: 20px;
@@ -174,13 +170,11 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.body.appendChild(notification);
         
-        // Animate in
         setTimeout(() => {
             notification.style.opacity = '1';
             notification.style.transform = 'translateX(0)';
         }, 100);
         
-        // Close button functionality
         const closeBtn = notification.querySelector('.notification-close');
         closeBtn.addEventListener('click', () => {
             notification.style.opacity = '0';
@@ -188,7 +182,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => notification.remove(), 300);
         });
         
-        // Auto remove after 5 seconds
         setTimeout(() => {
             if (document.contains(notification)) {
                 notification.style.opacity = '0';
@@ -197,23 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }, 5000);
     }
-
-    // Smooth reveal animation for elements on scroll
-    function revealOnScroll() {
-        const elements = document.querySelectorAll('.about-card, .skill-category, .contact-item, .stat-item');
-        
-        elements.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const elementVisible = 150;
-            
-            if (elementTop < window.innerHeight - elementVisible) {
-                element.classList.add('animate');
-            }
-        });
-    }
-
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll(); // Run on load
 
     // Add hover effects to buttons
     document.querySelectorAll('.btn').forEach(button => {
@@ -316,5 +292,5 @@ function throttle(func, wait) {
 
 // Apply throttling to scroll events
 window.addEventListener('scroll', throttle(() => {
-    // Scroll-based animations here
+    // Other scroll-based logic could go here if needed
 }, 16)); // ~60fps

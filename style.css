@@ -53,7 +53,7 @@ body {
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px; /* Adjust based on header height */
+    scroll-padding-top: 80px; /* Garante que o cabeçalho não cubra o título da seção */
 }
 
 /* Container */
@@ -380,7 +380,6 @@ html {
     margin: 0 auto;
 }
 
-/* --- ALTERAÇÃO PRINCIPAL PARA O GRADIENTE --- */
 .main-content-wrapper {
     background: linear-gradient(to bottom, 
         var(--soft-pink), 
@@ -396,9 +395,8 @@ html {
 .projects,
 .contact {
     padding: var(--spacing-xxl) 0;
-    background: transparent; /* Garante que as seções sejam transparentes */
+    background: transparent;
 }
-/* --- FIM DA ALTERAÇÃO --- */
 
 .about-content {
     display: grid;

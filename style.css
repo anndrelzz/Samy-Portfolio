@@ -39,9 +39,9 @@
     --shadow-strong: 0 12px 40px rgba(139, 69, 19, 0.2);
     
     /* Transitions */
-    --transition-fast: 0.3s ease;
-    --transition-medium: 0.5s ease;
-    --transition-slow: 0.7s ease;
+    --transition-fast: 0.4s ease-in-out;
+    --transition-medium: 0.8s ease-in-out;
+    --transition-slow: 1.2s ease-in-out;
 }
 
 body {
@@ -52,7 +52,7 @@ body {
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: smooth; /* <<< ESTA É A LINHA QUE CRIA A ANIMAÇÃO SUAVE */
     scroll-padding-top: 80px; /* Garante que o cabeçalho não cubra o título da seção */
 }
 
@@ -548,7 +548,7 @@ html {
     background: var(--gradient-primary);
     border-radius: 10px;
     width: 0;
-    transition: width 2s ease;
+    transition: width 2s ease-in-out;
     position: relative;
 }
 

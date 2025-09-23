@@ -1,6 +1,5 @@
 import './style.css'
 
-// O código inteiro será envolvido no 'DOMContentLoaded' para garantir que o HTML esteja pronto.
 document.addEventListener('DOMContentLoaded', function() {
 
     // Mobile menu toggle
@@ -9,7 +8,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (hamburger && navMenu) {
         hamburger.addEventListener('click', function() {
-            // Adicionando uma classe ao body para desabilitar o scroll quando o menu estiver aberto
             document.body.classList.toggle('menu-open');
             navMenu.classList.toggle('active');
             hamburger.classList.toggle('active');
@@ -30,47 +28,35 @@ document.addEventListener('DOMContentLoaded', function() {
     // Header background on scroll
     const header = document.querySelector('.header');
     window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) { // Diminuí o valor para o efeito aparecer mais cedo
+        if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
     });
 
-    // --- SISTEMA DE ANIMAÇÃO ÚNICO E CORRIGIDO ---
-    // Intersection Observer for all animations
-    const observerOptions = {
-        threshold: 0.1, // O elemento precisa estar 10% visível
-        rootMargin: '0px 0px -50px 0px' // Começa a observar um pouco antes de chegar no elemento
-    };
-
+    // --- SISTEMA DE ANIMAÇÃO ÚNICO E ROBUSTO ---
     const observer = new IntersectionObserver((entries, observerInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                // Adiciona a classe para animar o elemento
                 entry.target.classList.add('animate');
-                // Para de observar o elemento depois que ele foi animado (melhora a performance)
+                
+                // Se o elemento for a seção de habilidades, aciona a animação das barras
+                if (entry.target.id === 'habilidades') {
+                    animateSkills();
+                }
+
+                // Para de observar o elemento para melhorar a performance
                 observerInstance.unobserve(entry.target);
             }
         });
-    }, observerOptions);
+    }, { threshold: 0.1 });
 
-    // Observe all elements that need animation
-    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item').forEach(el => observer.observe(el));
-
-    // Skills bar animation
-    const skillsSection = document.querySelector('#habilidades');
-    const skillsObserver = new IntersectionObserver((entries, skillsObserverInstance) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateSkills();
-                skillsObserverInstance.unobserve(entry.target); // Anima apenas uma vez
-            }
-        });
-    }, { threshold: 0.3 });
-
-    if (skillsSection) {
-        skillsObserver.observe(skillsSection);
-    }
+    // Observa todos os elementos que precisam de animação
+    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item, #habilidades').forEach(el => {
+        observer.observe(el);
+    });
 
     function animateSkills() {
         const skillBars = document.querySelectorAll('.skill-progress');
@@ -78,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 const progress = bar.dataset.progress;
                 bar.style.width = progress + '%';
-            }, index * 150); // Acelerei um pouco a animação
+            }, index * 150);
         });
     }
 
@@ -88,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const parallaxElements = document.querySelectorAll('.floating-elements .element');
         
         parallaxElements.forEach((element, index) => {
-            const speed = (index + 1) * 0.05; // Suavizei o efeito parallax
+            const speed = (index + 1) * 0.05;
             element.style.transform = `translateY(${scrolled * speed}px)`;
         });
 
@@ -140,7 +126,6 @@ document.addEventListener('DOMContentLoaded', function() {
         notification.innerHTML = `<div class="notification-content"><span class="notification-message">${message}</span><button class="notification-close">&times;</button></div>`;
         document.body.appendChild(notification);
         
-        // Trigger the animation
         setTimeout(() => {
             notification.classList.add('show');
         }, 100);
@@ -161,59 +146,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Inject necessary CSS for notification and other dynamic styles
     const style = document.createElement('style');
     style.textContent = `
-        /* Adicionando estilos para a notificação e menu mobile */
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            color: white;
-            padding: 16px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-            z-index: 10000;
-            opacity: 0;
-            transform: translateX(100px);
-            transition: all 0.3s ease;
-            max-width: 300px;
-            font-family: var(--font-primary);
-        }
+        /* Estilos dinâmicos para notificação e menu mobile */
+        .notification { position: fixed; top: 20px; right: 20px; color: white; padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 10000; opacity: 0; transform: translateX(100px); transition: all 0.3s ease; max-width: 300px; font-family: var(--font-primary); }
         .notification.notification-success { background: #4CAF50; }
         .notification.notification-error { background: #f44336; }
         .notification.notification-info { background: #2196F3; }
-        .notification.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
+        .notification.show { opacity: 1; transform: translateX(0); }
         .notification-content { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
         .notification-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; transition: background 0.2s; border-radius: 50%; width: 24px; height: 24px; }
         .notification-close:hover { background: rgba(255,255,255,0.2); }
-        .header.scrolled {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(15px);
-            box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1);
-        }
+        .header.scrolled { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1); }
         @media (max-width: 768px) {
-            .nav-menu {
-                position: fixed;
-                left: -100%;
-                top: 0;
-                gap: 0;
-                flex-direction: column;
-                background-color: white;
-                width: 100%;
-                height: 100vh;
-                text-align: center;
-                transition: 0.3s;
-                justify-content: center;
-            }
-            .nav-menu.active {
-                left: 0;
-            }
-            .nav-link {
-                font-size: 1.5rem;
-                padding: 1rem 0;
-                display: block;
-            }
+            .nav-menu { position: fixed; left: -100%; top: 0; gap: 0; flex-direction: column; background-color: white; width: 100%; height: 100vh; text-align: center; transition: 0.3s; justify-content: center; }
+            .nav-menu.active { left: 0; }
+            .nav-link { font-size: 1.5rem; padding: 1rem 0; display: block; }
             .hamburger.active span:nth-child(2) { opacity: 0; }
             .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
             .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
@@ -221,5 +167,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
-
 });

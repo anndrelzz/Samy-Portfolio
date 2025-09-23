@@ -35,42 +35,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- SISTEMA DE ANIMAÇÃO CORRIGIDO ---
-
-    // 1. Observador para animações GERAIS (fade-in, slide-up)
-    const generalObserver = new IntersectionObserver((entries, observerInstance) => {
+    // --- SISTEMA DE ANIMAÇÃO ÚNICO E FINAL ---
+    const animationObserver = new IntersectionObserver((entries, observerInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
+                // Adiciona a classe de animação para o elemento aparecer
                 entry.target.classList.add('animate');
+                
+                // VERIFICAÇÃO ESPECIAL: Se o elemento for a seção de habilidades,
+                // acionamos a animação das barras de progresso.
+                if (entry.target.id === 'habilidades') {
+                    animateSkills();
+                }
+
+                // Para de observar o elemento para melhorar a performance
                 observerInstance.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.1 });
+    }, { threshold: 0.2 }); // Aciona quando 20% do elemento estiver visível
 
-    // Observa todos os elementos GERAIS
-    document.querySelectorAll('.about-card, .stat-item, .contact-item, .skill-category').forEach(el => {
-        generalObserver.observe(el);
+    // Observa TODOS os elementos que precisam de animação, incluindo a seção #habilidades
+    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item, #habilidades').forEach(el => {
+        animationObserver.observe(el);
     });
-
-    // 2. Observador DEDICADO para a animação das barras de HABILIDADES
-    const skillsSection = document.querySelector('#habilidades');
-    const skillsObserver = new IntersectionObserver((entries, observerInstance) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                animateSkills();
-                observerInstance.unobserve(entry.target); // Roda a animação das barras apenas uma vez
-            }
-        });
-    }, { threshold: 0.3 }); // Aciona quando 30% da seção estiver visível
-
-    if (skillsSection) {
-        skillsObserver.observe(skillsSection);
-    }
 
     // Função que anima as barras de progresso
     function animateSkills() {
         const skillBars = document.querySelectorAll('.skill-progress');
         skillBars.forEach((bar, index) => {
+            // Pequeno delay para a animação ser mais agradável
             setTimeout(() => {
                 const progress = bar.dataset.progress;
                 bar.style.width = progress + '%';

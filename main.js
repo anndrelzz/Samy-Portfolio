@@ -35,41 +35,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // --- SISTEMA DE ANIMAÇÃO ÚNICO E FINAL ---
+    // --- SISTEMA DE ANIMAÇÃO SIMPLIFICADO ---
+
+    // Observador para animações de "aparecimento" (fade-in, slide-up)
     const animationObserver = new IntersectionObserver((entries, observerInstance) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                // Adiciona a classe de animação para o elemento aparecer
                 entry.target.classList.add('animate');
-                
-                // VERIFICAÇÃO ESPECIAL: Se o elemento for a seção de habilidades,
-                // acionamos a animação das barras de progresso.
-                if (entry.target.id === 'habilidades') {
-                    animateSkills();
-                }
-
-                // Para de observar o elemento para melhorar a performance
                 observerInstance.unobserve(entry.target);
             }
         });
-    }, { threshold: 0.2 }); // Aciona quando 20% do elemento estiver visível
+    }, { threshold: 0.1 });
 
-    // Observa TODOS os elementos que precisam de animação, incluindo a seção #habilidades
-    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item, #habilidades').forEach(el => {
+    // Observa os elementos que devem aparecer ao rolar
+    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item').forEach(el => {
         animationObserver.observe(el);
     });
-
+    
     // Função que anima as barras de progresso
     function animateSkills() {
         const skillBars = document.querySelectorAll('.skill-progress');
         skillBars.forEach((bar, index) => {
-            // Pequeno delay para a animação ser mais agradável
             setTimeout(() => {
                 const progress = bar.dataset.progress;
                 bar.style.width = progress + '%';
-            }, index * 150);
+            }, index * 150 + 250); // Adicionado um pequeno delay geral para garantir que a página carregou
         });
     }
+
+    // ACIONA A ANIMAÇÃO DAS BARRAS ASSIM QUE A PÁGINA ESTIVER PRONTA
+    animateSkills();
 
     // Parallax effect for hero elements
     window.addEventListener('scroll', () => {

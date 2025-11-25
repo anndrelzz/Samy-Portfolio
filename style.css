@@ -5,18 +5,22 @@
 }
 
 :root {
-    --color-primary: #A89080;
-    --color-secondary: #C4B5A8;
-    --color-accent: #8B7869;
-    --color-light: #F5F1ED;
-    --color-lighter: #FAF8F5;
-    --color-text: #4A4139;
-    --color-text-light: #6B5D54;
+    --color-primary: #A89080; /* Cor Primária (Marrom/Bege Forte) */
+    --color-secondary: #C4B5A8; /* Cor Secundária (Bege Médio) */
+    --color-accent: #8B7869; /* Cor de Destaque (Marrom Mais Escuro) */
+    --color-light: #F5F1ED; /* Fundo Secundário (Bege Claro) */
+    --color-lighter: #FAF8F5; /* Fundo Principal (Bege Mais Claro) */
+    --color-text: #4A4139; /* Cor do Texto Escuro */
+    --color-text-light: #6B5D54; /* Cor do Texto Suave */
     --color-white: #FFFFFF;
     --color-shadow: rgba(138, 120, 105, 0.1);
     --spacing-unit: 8px;
     --border-radius: 8px;
     --transition: all 0.3s ease;
+    
+    /* Cores de Marca (mantidas para referência, mas os botões usam o tema) */
+    --color-whatsapp: #25D366; 
+    --color-linkedin: #0A66C2; 
 }
 
 html {
@@ -24,7 +28,8 @@ html {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* FONTE ATUALIZADA */
+    font-family: 'Inter', -apple-system, BlinkMacMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.6;
     color: var(--color-text);
     background-color: var(--color-lighter);
@@ -309,17 +314,17 @@ body {
     background-color: var(--color-white);
     border-radius: var(--border-radius);
     overflow: hidden;
-    box-shadow: 0 4px 16px var(--color-shadow);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04); 
     transition: var(--transition);
     cursor: pointer;
 }
 
 .project-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 8px 24px rgba(138, 120, 105, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.08); 
 }
 
-.project-image {
+.project-card .project-image {
     width: 100%;
     height: 250px;
     background-color: var(--color-secondary);
@@ -328,7 +333,15 @@ body {
     justify-content: center;
     color: var(--color-white);
     font-size: 1.2rem;
+    overflow: hidden;
 }
+
+.project-card .project-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
 
 .project-content {
     padding: calc(var(--spacing-unit) * 3);
@@ -352,46 +365,219 @@ body {
     margin: 0 auto;
 }
 
-.contact-info {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: calc(var(--spacing-unit) * 4);
-}
+/* --- ESTILOS DA SEÇÃO DE CONTATO --- */
 
-.contact-item {
-    text-align: center;
-    padding: calc(var(--spacing-unit) * 3);
-    background-color: var(--color-white);
-    border-radius: var(--border-radius);
-    box-shadow: 0 2px 12px var(--color-shadow);
-    transition: var(--transition);
-}
-
-.contact-item:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(138, 120, 105, 0.2);
-}
-
-.contact-item h3 {
-    font-size: 1.2rem;
-    color: var(--color-accent);
-    margin-bottom: calc(var(--spacing-unit) * 2);
-    font-weight: 500;
-}
-
-.contact-item p {
+.contact-heading {
+    margin-bottom: calc(var(--spacing-unit) * 2); 
+    font-size: 3rem; 
+    font-weight: 300;
     color: var(--color-text);
 }
 
-.contact-item a {
+.contact-heading .primary-text {
     color: var(--color-primary);
-    text-decoration: none;
-    transition: var(--transition);
+    font-weight: 400; 
 }
 
-.contact-item a:hover {
-    color: var(--color-accent);
+.contact-subheading {
+    text-align: center;
+    color: var(--color-text-light);
+    font-size: 1.1rem;
+    margin-bottom: calc(var(--spacing-unit) * 8); 
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+.contact-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: calc(var(--spacing-unit) * 4);
+    margin-bottom: calc(var(--spacing-unit) * 6);
+}
+
+.contact-item {
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
+    box-shadow: 0 1px 8px var(--color-shadow);
+    transition: var(--transition);
+    /* Borda sutil nos cards */
+    border: 1px solid rgba(138, 120, 105, 0.1); 
+    
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: calc(var(--spacing-unit) * 3);
+    gap: calc(var(--spacing-unit) * 2);
+}
+
+.contact-item:hover {
+    box-shadow: 0 4px 12px rgba(138, 120, 105, 0.2);
+    border-color: var(--color-primary); 
+    transform: none; 
+}
+
+.contact-item .icon-wrapper {
+    /* Estilização do container do ícone */
+    padding: calc(var(--spacing-unit) * 1.5); 
+    background-color: rgba(168, 144, 128, 0.1); 
+    border-radius: var(--border-radius);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1; 
+}
+
+.contact-item .icon-wrapper i {
+    /* FORÇA A EXIBIÇÃO DO ÍCONE FA E DEFINE COR */
+    font-family: 'Font Awesome 6 Free'; 
+    font-weight: 900; 
+    font-size: 1.4rem; 
+    color: var(--color-primary); 
+    line-height: 1;
+}
+
+.contact-item .icon-wrapper .fab {
+    font-family: 'Font Awesome 6 Brands'; 
+    font-weight: 400; 
+}
+
+.contact-item .text-content {
+    text-align: left;
+}
+
+.contact-item .label {
+    font-size: 0.875rem; 
+    color: var(--color-text-light);
+    margin-bottom: calc(var(--spacing-unit) * 0.5);
+}
+
+.contact-item .detail {
+    color: var(--color-text);
+    font-weight: 500;
+    line-height: 1.2;
+    word-break: break-word; 
+}
+
+.contact-link {
+    color: inherit;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.contact-link:hover {
+    color: var(--color-primary);
+}
+
+
+.contact-buttons {
+    display: flex;
+    justify-content: center;
+    gap: calc(var(--spacing-unit) * 4);
+    margin-top: calc(var(--spacing-unit) * 4);
+    flex-wrap: wrap; 
+}
+
+.button {
+    display: inline-flex;
+    align-items: center;
+    /* Adiciona flex-wrap:nowrap para hover */
+    flex-wrap: nowrap;
+    
+    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease, padding 0.3s ease, width 0.3s ease; 
+    
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 2) calc(var(--spacing-unit) * 4);
+    border-radius: var(--border-radius);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px var(--color-shadow);
+    gap: calc(var(--spacing-unit)); 
+    line-height: 1.2; 
+    
+    /* Define o tamanho inicial do botão para manter a largura no hover */
+    min-width: 200px; 
+}
+
+/* --- EFEITO HOVER NO BOTÃO WHATSAPP (CORRIGIDO PARA MANTER TAMANHO) --- */
+
+.button-text {
+    /* Ocupa espaço por padrão */
+    transition: opacity 0.3s ease, max-width 0.3s ease, margin-right 0.3s ease;
+    white-space: nowrap; 
+    max-width: 200px; 
+}
+
+.button-whatsapp {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border: 2px solid var(--color-primary);
+    /* Altera a justificação para centralizar o ícone quando o texto sumir */
+    justify-content: flex-start;
+}
+
+.button-whatsapp:hover {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+    
+    /* Mantém a largura, mas centraliza o conteúdo */
+    justify-content: center;
+}
+
+.button-whatsapp:hover .button-text {
+    /* Esconde o texto e remove seu espaço */
+    opacity: 0;
+    max-width: 0; 
+    margin-left: calc(var(--spacing-unit) * -1); /* Puxa para a esquerda para fechar o gap */
+    gap: 0;
+}
+
+/* --- FIM DO EFEITO HOVER NO BOTÃO WHATSAPP --- */
+
+.button-linkedin {
+    background-color: var(--color-white);
+    color: var(--color-primary); 
+    border: 2px solid var(--color-secondary);
+}
+
+.button-linkedin:hover {
+    background-color: var(--color-light);
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    transform: translateY(-2px);
+}
+
+.button-icon {
+    font-size: 1.2rem;
+    line-height: 1;
+    flex-shrink: 0; 
+}
+
+/* Força a fonte e a cor para os ícones dentro dos botões */
+.button-icon i {
+    font-family: 'Font Awesome 6 Brands'; /* Para ícones de marca (WhatsApp, LinkedIn) */
+    font-weight: 400;
+}
+
+.button-whatsapp .button-icon i {
+    color: var(--color-white); /* Ícone branco no botão primário */
+}
+
+.button-linkedin .button-icon i {
+    color: var(--color-primary); 
+    transition: color 0.3s ease;
+}
+
+.button-linkedin:hover .button-icon i {
+    color: var(--color-accent); 
+}
+
+
+/* --- RODAPÉ E MEDIA QUERIES --- */
 
 .footer {
     background-color: var(--color-accent);
@@ -448,4 +634,163 @@ body {
     .section-title {
         font-size: 2rem;
     }
+    
+    .contact-buttons {
+        flex-direction: column;
+        gap: calc(var(--spacing-unit) * 2);
+    }
+
+    .contact-info {
+        grid-template-columns: 1fr; 
+    }
+}
+
+/* --- Estilos do Modal/Pop-up (Manutenção) --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+    padding: calc(var(--spacing-unit) * 4);
+}
+
+.modal-content {
+    background-color: var(--color-white);
+    margin: auto;
+    padding: calc(var(--spacing-unit) * 4);
+    border-radius: var(--border-radius);
+    max-width: 1100px; 
+    width: 90%;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    position: relative;
+    animation-name: animatetop;
+    animation-duration: 0.4s;
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+.modal-close {
+    color: var(--color-text-light);
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    transition: var(--transition);
+    position: absolute;
+    top: calc(var(--spacing-unit) * 2);
+    right: calc(var(--spacing-unit) * 4);
+    z-index: 2001;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+    color: var(--color-accent);
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-body {
+    display: flex;
+    gap: calc(var(--spacing-unit) * 3);
+    flex-direction: column; 
+}
+
+.modal-project-image {
+    min-width: 100%; 
+    height: 550px; 
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+    border: 1px solid var(--color-secondary); 
+    padding: 0; 
+}
+
+.modal-project-details {
+    width: 100%; 
+    padding: calc(var(--spacing-unit) * 2) 0 0 0; 
+}
+
+.modal-project-details h3 {
+    font-size: 1.8rem;
+    color: var(--color-accent);
+    margin-bottom: calc(var(--spacing-unit));
+    margin-top: 0; 
+}
+
+.modal-project-details p {
+    color: var(--color-text);
+    line-height: 1.7;
+}
+
+/* --- Estilos do Carrossel (Manutenção) --- */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.carousel-slides {
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-slide {
+    width: 100%;
+    height: 100%;
+    display: none;
+    align-items: center; 
+    justify-content: center;
+    background-color: #f0f0f0; 
+    color: var(--color-white);
+    font-size: 1.1rem;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+}
+
+/* Botões de navegação */
+.carousel-prev, .carousel-next {
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    margin-top: -22px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    user-select: none;
+    background-color: rgba(0,0,0,0.5);
+    border: none;
+    z-index: 10;
+}
+
+.carousel-prev {
+    left: 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.carousel-next {
+    right: 0;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.carousel-prev:hover, .carousel-next:hover {
+    background-color: var(--color-primary);
 }

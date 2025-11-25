@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Samara Boettscher - Arquitetura e Urbanismo</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLMD/cdjNf/T+089Q+E8Lg4b4aV8fQ2+p2NnE5u7Y4vT5Q8D3P1s6qW9Y2B7E1tO0A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <nav class="navbar">
@@ -36,7 +37,6 @@
                 <div class="sobre-text">
                     <p>Graduanda em Arquitetura e Urbanismo no Centro Universitário Católica de Santa Catarina em Joinville, com formação prevista para dezembro de 2027. Sou curiosa e prática, gosto de entender o todo, organizar e transformar ideias em soluções claras e executáveis.</p>
                     <p>Prezo por comunicação simples, combinar expectativas, com atenção ao detalhe sem perder a visão do conjunto. Meu amor pela arquitetura se intensifica cada vez mais durante o meu curso, buscando sempre relacionar a arte, a história, "o natural", e a memória afetiva aos conceitos de todos os meus projetos.</p>
-                    <p>Busco uma nova oportunidade de estágio em Arquitetura e Urbanismo em um escritório desafiador para colaborar e aprofundar minha experiência em projetos executivos, interiores ou documentação legal, contribuindo com minha proatividade e com os conhecimentos práticos adquiridos no dia a dia de um escritório.</p>
                 </div>
             </div>
         </div>
@@ -144,16 +144,65 @@
     </section>
 
     <section id="contato" class="section">
-        <div class="container">
-            <h2 class="section-title">Contato</h2>
+        <div class="container contact-content">
+            <h2 class="section-title contact-heading">
+                Vamos <span class="primary-text">Conversar?</span>
+            </h2>
+            <p class="contact-subheading">Estou sempre aberta a novas oportunidades e colaborações. Entre em contato comigo!</p>
+
+            <div class="contact-info">
+                <div class="contact-item card-location">
+                    <div class="icon-wrapper"><i class="fas fa-location-dot"></i></div>
+                    <div class="text-content">
+                        <p class="label">Localização</p>
+                        <p class="detail">Bairro Santa Catarina, Joinville - SC</p>
+                    </div>
+                </div>
+                <div class="contact-item card-email">
+                    <div class="icon-wrapper"><i class="fas fa-envelope"></i></div>
+                    <div class="text-content">
+                        <p class="label">Email</p>
+                        <p class="detail"><a href="mailto:samyboettscher@gmail.com" class="contact-link">samyboettscher@gmail.com</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-buttons">
+                <a href="https://w.app/y9yxza" target="_blank" class="button button-whatsapp">
+                    <span class="button-icon"><i class="fab fa-whatsapp"></i></span>
+                    <span class="button-text">Entre em contato comigo</span> 
+                </a>
+                <a href="https://www.linkedin.com/in/samara-boettscher" target="_blank" class="button button-linkedin">
+                    <span class="button-icon"><i class="fab fa-linkedin-in"></i></span>
+                    Ver LinkedIn
+                </a>
+            </div>
         </div>
     </section>
 
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2024 Samara Boettscher - Arquitetura e Urbanismo. Todos os direitos reservados.</p>
+            <p>&copy; 2025 Samara Boettscher - Arquitetura & Urbanismo. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <div class="modal-body">
+                <div class="modal-project-image">
+                    <div class="carousel-container">
+                        <div id="projectCarousel" class="carousel-slides">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-project-details">
+                    <h3 id="modalTitle">Título do Projeto</h3>
+                    <p id="modalDescription">Descrição detalhada do projeto.</p>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script type="module" src="main.js"></script>
 </body>

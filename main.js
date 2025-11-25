@@ -1,169 +1,87 @@
-import './style.css'
-
-document.addEventListener('DOMContentLoaded', function() {
-
-    // Mobile menu toggle
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    
-    if (hamburger && navMenu) {
-        hamburger.addEventListener('click', function() {
-            document.body.classList.toggle('menu-open');
-            navMenu.classList.toggle('active');
-            hamburger.classList.toggle('active');
-        });
+const projects = [
+    {
+        title: "Projeto 01 - Criação Luminosa",
+        description: "Primeiro projeto na faculdade desenvolvido no 1º semestre, explorando forma, luz e efeitos de sombra. Luminária concebida a partir de peças curvas moduladas, modeladas digitalmente e conectadas por encaixes que dispensam ferragens."
+    },
+    {
+        title: "Projeto 02 - Casa Pátio",
+        description: "Projeto de Casa Pátio desenvolvido no 3º semestre, pensando no dimensionamento, layout, iluminação, ventilação e relações com o espaço vazio, atendendo ao programa mínimo e preferências do perfil de usuário proposto."
+    },
+    {
+        title: "Projeto 03 - Centro Comunitário Elo",
+        description: "Centro comunitário realizado em grupo no 4º semestre. O conceito 'Elo' simboliza união e conexão entre pessoas e espaços, promovendo interações e fortalecendo vínculos culturais. Forma circular que cria um espaço inclusivo e sem hierarquias."
+    },
+    {
+        title: "Projeto 04 - Residência",
+        description: "Projeto residencial desenvolvido individualmente no 4º semestre utilizando ArchiCAD, incluindo planta baixa, cortes, fachadas e isométricas explodidas."
+    },
+    {
+        title: "Projeto 05 - Edificação Vertical",
+        description: "Projeto de edificação vertical comercial e residencial desenvolvido em grupo no 5º semestre. Volumetria orgânica com cantos arredondados e projeções diagonais, criando efeito visual ondulado através do espelhamento dos pavimentos."
+    },
+    {
+        title: "Projeto 06 - Interiores Residenciais",
+        description: "Projeto de interiores desenvolvido na Rengel Engenharia e Arquitetura, incluindo modelagem, detalhamento executivo e mobiliário para Hall de Entrada, Sala de Estar, Sala de Jantar e Cozinha. Realizado com SketchUp, Layout e D5 Render."
     }
+];
 
-    // --- LÓGICA DE ROLAGEM SUAVE COM JAVASCRIPT ---
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.addEventListener('click', function(event) {
-            // 1. Previne o comportamento padrão (o "salto" instantâneo)
-            event.preventDefault();
+function loadProjects() {
+    const projectsGrid = document.getElementById('projectsGrid');
 
-            // 2. Pega o ID da seção alvo (ex: "#sobre") a partir do link clicado
-            const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-
-            // 3. Se a seção existir, rola suavemente até ela
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
-            
-            // Lógica para fechar o menu mobile após o clique
-            if (navMenu && navMenu.classList.contains('active')) {
-                document.body.classList.remove('menu-open');
-                navMenu.classList.remove('active');
-                hamburger.classList.remove('active');
-            }
-        });
+    projects.forEach((project, index) => {
+        const projectCard = document.createElement('div');
+        projectCard.className = 'project-card';
+        projectCard.innerHTML = `
+            <div class="project-image">Projeto ${index + 1}</div>
+            <div class="project-content">
+                <h3>${project.title}</h3>
+                <p>${project.description}</p>
+            </div>
+        `;
+        projectsGrid.appendChild(projectCard);
     });
+}
 
-    // Header background on scroll
-    const header = document.querySelector('.header');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-    });
-
-    // --- SISTEMA DE ANIMAÇÃO ÚNICO E ROBUSTO ---
-    const animationObserver = new IntersectionObserver((entries, observerInstance) => {
+function animateSkills() {
+    const skillLevels = document.querySelectorAll('.skill-level');
+    const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.classList.add('animate');
-                
-                if (entry.target.classList.contains('skill-category')) {
-                    animateSkills(entry.target);
-                }
-
-                observerInstance.unobserve(entry.target);
+                entry.target.style.width = entry.target.style.width;
             }
         });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.5 });
 
-    // Observa TODOS os elementos que precisam de animação
-    document.querySelectorAll('.about-card, .stat-item, .skill-category, .contact-item').forEach(el => {
-        animationObserver.observe(el);
+    skillLevels.forEach(skill => {
+        observer.observe(skill);
     });
+}
 
-    // Função que anima as barras de progresso DENTRO de um card específico
-    function animateSkills(skillCategoryElement) {
-        const skillBars = skillCategoryElement.querySelectorAll('.skill-progress');
-        skillBars.forEach((bar, index) => {
-            setTimeout(() => {
-                const progress = bar.dataset.progress;
-                bar.style.width = progress + '%';
-            }, index * 150);
-        });
-    }
+document.addEventListener('DOMContentLoaded', () => {
+    loadProjects();
+    animateSkills();
 
-    // Parallax effect for hero elements
-    window.addEventListener('scroll', () => {
-        const scrolled = window.pageYOffset;
-        const parallaxElements = document.querySelectorAll('.floating-elements .element');
-        
-        parallaxElements.forEach((element, index) => {
-            const speed = (index + 1) * 0.05;
-            element.style.transform = `translateY(${scrolled * speed}px)`;
-        });
-
-        const architectIcon = document.querySelector('.architect-svg');
-        if (architectIcon) {
-            architectIcon.style.transform = `rotate(${scrolled * 0.1}deg)`;
-        }
-    });
-
-    // Contact form handling (seu código existente)
-    const contactForm = document.getElementById('contactForm');
-    if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
             e.preventDefault();
-            const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject');
-            const message = formData.get('message');
-            if (!name || !email || !subject || !message) {
-                showNotification('Por favor, preencha todos os campos.', 'error');
-                return;
-            }
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                showNotification('Por favor, insira um email válido.', 'error');
-                return;
-            }
-            showNotification('Mensagem enviada com sucesso! Retornarei em breve.', 'success');
-            contactForm.reset();
-            document.querySelectorAll('.form-group input, .form-group textarea').forEach(field => field.blur());
-        });
-    }
+            const targetId = link.getAttribute('href').substring(1);
+            const targetSection = document.getElementById(targetId);
+            const navbarHeight = document.querySelector('.navbar').offsetHeight;
 
-    // Notification system (seu código existente)
-    function showNotification(message, type = 'info') {
-        document.querySelectorAll('.notification').forEach(n => n.remove());
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.innerHTML = `<div class="notification-content"><span class="notification-message">${message}</span><button class="notification-close">&times;</button></div>`;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.classList.add('show'), 100);
-        notification.querySelector('.notification-close').addEventListener('click', () => {
-            notification.classList.remove('show');
-            setTimeout(() => notification.remove(), 300);
+            window.scrollTo({
+                top: targetSection.offsetTop - navbarHeight,
+                behavior: 'smooth'
+            });
         });
-        setTimeout(() => {
-            if (document.body.contains(notification)) {
-                notification.classList.remove('show');
-                setTimeout(() => notification.remove(), 300);
-            }
-        }, 5000);
-    }
+    });
 
-    // Inject necessary CSS for notification and other dynamic styles
-    const style = document.createElement('style');
-    style.textContent = `
-        .notification { position: fixed; top: 20px; right: 20px; color: white; padding: 16px 20px; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 10000; opacity: 0; transform: translateX(100px); transition: all 0.3s ease; max-width: 300px; font-family: var(--font-primary); }
-        .notification.notification-success { background: #4CAF50; }
-        .notification.notification-error { background: #f44336; }
-        .notification.notification-info { background: #2196F3; }
-        .notification.show { opacity: 1; transform: translateX(0); }
-        .notification-content { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
-        .notification-close { background: none; border: none; color: white; font-size: 20px; cursor: pointer; padding: 0; transition: background 0.2s; border-radius: 50%; width: 24px; height: 24px; }
-        .notification-close:hover { background: rgba(255,255,255,0.2); }
-        .header.scrolled { background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(15px); box-shadow: 0 2px 20px rgba(139, 69, 19, 0.1); }
-        @media (max-width: 768px) {
-            .nav-menu { position: fixed; left: -100%; top: 0; gap: 0; flex-direction: column; background-color: white; width: 100%; height: 100vh; text-align: center; transition: 0.3s; justify-content: center; }
-            .nav-menu.active { left: 0; }
-            .nav-link { font-size: 1.5rem; padding: 1rem 0; display: block; }
-            .hamburger.active span:nth-child(2) { opacity: 0; }
-            .hamburger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-            .hamburger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-            body.menu-open { overflow: hidden; }
+    window.addEventListener('scroll', () => {
+        const navbar = document.querySelector('.navbar');
+        if (window.scrollY > 50) {
+            navbar.style.boxShadow = '0 4px 20px rgba(138, 120, 105, 0.15)';
+        } else {
+            navbar.style.boxShadow = '0 2px 12px rgba(138, 120, 105, 0.1)';
         }
-    `;
-    document.head.appendChild(style);
+    });
 });
